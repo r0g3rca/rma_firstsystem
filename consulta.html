@@ -1,1 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIRST SYSTEM - Consulta de Estatus</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #f3f4f7, #e8f5e9);
+        }
 
+        .container-main {
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .login-form {
+            width: 100%;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(88, 188, 130, 0.3);
+        }
+
+        .header-img {
+            width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .form-heading {
+            text-align: center;
+            color: #2e7d32;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group .label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            font-size: 11px;
+            color: #45a56b;
+            font-weight: 700;
+            background: white;
+            padding: 0 5px;
+            z-index: 1;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            background-color: #fafafa;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            outline: none;
+            text-align: center;
+        }
+
+        .submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #58bc82;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .submit:hover {
+            background-color: #45a56b;
+            transform: scale(1.02);
+        }
+
+        /* DISEÑO DEL TICKET DE RESULTADO */
+        .ticket-result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            border: 2px dashed #58bc82;
+            border-radius: 15px;
+            background-color: #fff;
+        }
+
+        .status-badge {
+            display: block;
+            text-align: center;
+            padding: 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 4px;
+        }
+
+        .data-label { color: #666; font-weight: 600; }
+        .data-value { color: #333; }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .social-links a { font-size: 1.5rem; color: #58bc82; transition: 0.3s; }
+
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 35px;
+            box-shadow: 2px 5px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<a href="https://wa.me/584129020243" class="whatsapp-float" target="_blank">
+    <i class="bi bi-whatsapp"></i>
+</a>
+
+<div class="container-main">
+    <div class="login-form">
+        <img src="imagenes/header.png" class="header-img" alt="First System">
+        <p class="form-heading">Consulta de Estatus</p>
+
+        <div class="input-group">
+            <label class="label">INGRESE N° DE ORDEN</label>
+            <input type="text" id="inputOrden" placeholder="Ej: 1111">
+        </div>
+
+        <button class="submit" onclick="consultarOrden()">Consultar Ahora</button>
+
+        <div id="ticket" class="ticket-result">
+            <div id="estatusBadge" class="status-badge"></div>
+            <div class="data-row"><span class="data-label">Orden:</span> <span class="data-value" id="res-orden"></span></div>
+            <div class="data-row"><span class="data-label">Equipo:</span> <span class="data-value" id="res-equipo"></span></div>
+            <div class="data-row"><span class="data-label">Serial:</span> <span class="data-value" id="res-serial"></span></div>
+            <div class="data-row"><span class="data-label">Falla:</span> <span class="data-value" id="res-falla"></span></div>
+            <div class="mt-3 p-2 bg-light rounded shadow-sm">
+                <small class="data-label d-block mb-1">Diagnóstico Técnico:</small>
+                <span id="res-diagnostico" class="data-value" style="font-style: italic;"></span>
+            </div>
+        </div>
+
+        <div class="social-links">
+            <a href="index.html" title="Volver al Registro"><i class="bi bi-house-door"></i></a>
+            <a href="https://facebook.com/firstsystem" target="_blank"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/firstsystem" target="_blank"><i class="bi bi-instagram"></i></a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpD2MIOA1r_aSM3ifDU6m86LCufQLnXmkMiGDjX4kU_hSoclHAPc5zanmxZeiKQe6zEw/exec';
+
+    async function consultarOrden() {
+        const orden = document.getElementById('inputOrden').value.trim();
+        const ticket = document.getElementById('ticket');
+        const btn = document.querySelector('.submit');
+
+        if (!orden) return alert("Por favor, ingrese un número de orden.");
+
+        btn.disabled = true;
+        btn.textContent = "Buscando...";
+        ticket.style.display = 'none';
+
+        try {
+            const response = await fetch(`${SCRIPT_URL}?orden=${orden}`);
+            const data = await response.json();
+
+            if (data) {
+                document.getElementById('res-orden').textContent = data.orden;
+                document.getElementById('res-equipo').textContent = data.descripcion;
+                document.getElementById('res-serial').textContent = data.serial;
+                document.getElementById('res-falla').textContent = data.falla;
+                document.getElementById('res-diagnostico').textContent = data.detalle || "En revisión...";
+
+                const badge = document.getElementById('estatusBadge');
+                badge.textContent = data.estatus;
+                badge.style.backgroundColor = data.estatus === 'ENTREGADO' ? '#d1e7dd' : '#fff3cd';
+                badge.style.color = data.estatus === 'ENTREGADO' ? '#0f5132' : '#856404';
+
+                ticket.style.display = 'block';
+            } else {
+                alert("Orden no encontrada. Verifique el número.");
+            }
+        } catch (e) {
+            alert("Error de conexión con el sistema.");
+        } finally {
+            btn.disabled = false;
+            btn.textContent = "Consultar Ahora";
+        }
+    }
+</script>
+</body>
+</html>
