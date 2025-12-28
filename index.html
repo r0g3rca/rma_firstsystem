@@ -4,541 +4,277 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIRST SYSTEM - Registro de Equipos</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ===== VARIABLES CSS ===== */
-        :root {
-            /* Colores principales */
-            --primary-color: #2e7d32;
-            --primary-light: #58bc82;
-            --primary-dark: #1b5e20;
-            --accent-color: #45a56b;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --danger-color: #f44336;
-            
-            /* Colores neutrales */
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            
-            /* Espaciado */
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 3rem;
-            
-            /* Bordes */
-            --border-radius-sm: 8px;
-            --border-radius-md: 12px;
-            --border-radius-lg: 20px;
-            --border-radius-xl: 30px;
-            
-            /* Sombras */
-            --shadow-sm: 0 2px 8px var(--shadow-color);
-            --shadow-md: 0 10px 25px var(--shadow-color);
-            --shadow-lg: 0 15px 35px var(--shadow-color);
-            
-            /* Transiciones */
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.3s ease;
-            --transition-slow: 0.5s ease;
-            
-            /* Fuentes */
-            --font-primary: 'Poppins', sans-serif;
-            --font-secondary: 'Montserrat', sans-serif;
-        }
-
-        /* ===== RESET Y ESTILOS BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: var(--font-primary);
-            line-height: 1.6;
-            color: var(--text-dark);
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #f3f4f7 0%, #e8f5e9 100%);
             min-height: 100vh;
-            padding: var(--space-md);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            padding: 20px 0;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(88, 188, 130, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(46, 125, 50, 0.1) 0%, transparent 40%);
-            z-index: -1;
+        /* Estilo del Formulario Central */
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid rgba(88, 188, 130, 0.3);
         }
 
-        /* ===== CONTENEDOR PRINCIPAL ===== */
-        .container-main {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: var(--space-xl);
-            align-items: start;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== IMÁGENES LATERALES ===== */
-        .left-panel {
+        /* Imágenes Laterales */
+        .side-img-container {
             display: flex;
             flex-direction: column;
-            gap: var(--space-lg);
+            gap: 20px;
         }
 
-        .image-container {
+        .side-img {
             width: 100%;
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: all var(--transition-normal);
-            background: white; /* Fondo blanco por si la imagen tiene transparencia */
-        }
-
-        .image-container:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform var(--transition-slow);
-        }
-
-        .image-container:hover img {
-            transform: scale(1.05);
-        }
-
-        /* Contenedor derecho con dos imágenes */
-        .right-panel {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-lg);
-        }
-
-        /* Clases para controlar altura de imágenes si es necesario */
-        .main-image img, .secondary-image img {
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
             object-fit: cover;
         }
 
-        /* ===== FORMULARIO ===== */
-        .form-container {
-            background: var(--bg-white);
-            border-radius: var(--border-radius-lg);
-            padding: var(--space-xl);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(88, 188, 130, 0.2);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-            height: 100%;
+        .side-img:hover {
+            transform: scale(1.03);
         }
 
-        .form-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        /* Header Imagen */
+        .header-img {
+            width: 100%; 
+            max-height: 150px; 
+            object-fit: contain; 
+            margin-bottom: 20px;
         }
 
-        .company-header {
-            text-align: center;
-            margin-bottom: var(--space-lg);
+        /* Inputs Personalizados */
+        .form-control {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 10px;
         }
 
-        .company-logo {
-            max-width: 100%; /* Ajuste para que no se salga */
-            height: auto;
-            margin: 0 auto var(--space-md);
-            display: block;
-            border-radius: var(--border-radius-md);
+        .form-control:focus {
+            border-color: #58bc82;
+            box-shadow: 0 0 0 0.2rem rgba(88, 188, 130, 0.25);
+            background-color: #fff;
         }
 
-        .form-title {
-            text-align: center;
-            color: var(--primary-color);
-            font-family: var(--font-secondary);
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: var(--space-lg);
-            position: relative;
-            padding-bottom: var(--space-sm);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-        }
-
-        /* ===== GRUPOS DE INPUT ===== */
-        .input-group {
-            position: relative;
-            margin-bottom: var(--space-md);
-        }
-
-        .input-label {
-            position: absolute;
-            top: -10px;
-            left: 12px;
-            font-size: 0.8rem;
-            color: var(--primary-color);
+        .form-label {
+            color: #2e7d32;
             font-weight: 600;
-            background: var(--bg-white);
-            padding: 0 var(--space-xs);
-            z-index: 2;
-            letter-spacing: 0.5px;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
-        .form-input,
-        .form-textarea {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 0.95rem;
-            background-color: var(--bg-light);
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-sm);
-            outline: none;
-            transition: all var(--transition-fast);
-            font-family: var(--font-primary);
-        }
-
-        .form-input:focus,
-        .form-textarea:focus {
-            border-color: var(--primary-light);
-            background-color: var(--bg-white);
-            box-shadow: 0 0 0 3px rgba(88, 188, 130, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .form-input::placeholder,
-        .form-textarea::placeholder {
-            color: var(--text-light);
-            opacity: 0.7;
-        }
-
-        /* ===== BOTÓN DE ENVÍO ===== */
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: white;
+        /* Botón */
+        .btn-submit {
+            background: linear-gradient(135deg, #2e7d32, #58bc82);
             border: none;
-            border-radius: var(--border-radius-xl);
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-transform: uppercase;
+            border-radius: 30px;
+            padding: 12px;
+            width: 100%;
+            color: white;
+            font-weight: 700;
             letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            margin-top: var(--space-md);
+            transition: 0.3s;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: var(--transition-normal);
-        }
-
-        .submit-btn:hover {
+        .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(88, 188, 130, 0.3);
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* ===== REDES SOCIALES ===== */
-        .social-container {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-lg);
-            margin-top: var(--space-lg);
-            padding-top: var(--space-lg);
-            border-top: 1px solid var(--border-color);
-        }
-
-        .social-link {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-light);
-            border-radius: 50%;
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            transition: all var(--transition-normal);
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .social-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            opacity: 0;
-            transition: var(--transition-normal);
-        }
-
-        .social-link i {
-            position: relative;
-            z-index: 1;
-        }
-
-        .social-link:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .social-link:hover::before {
-            opacity: 1;
-        }
-
-        .social-link:hover i {
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
             color: white;
         }
 
-        /* ===== WHATSAPP FLOAT ===== */
+        /* Redes Sociales */
+        .social-icons a {
+            font-size: 1.8rem;
+            color: #58bc82;
+            margin: 0 10px;
+            transition: 0.3s;
+        }
+        
+        .social-icons a:hover {
+            color: #2e7d32;
+            transform: scale(1.2);
+        }
+
+        /* WhatsApp Flotante */
         .whatsapp-float {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #25d366, #128c7e);
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
             color: white;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+            z-index: 9999;
             text-decoration: none;
-            transition: all var(--transition-normal);
-            animation: pulse 2s infinite;
         }
 
         .whatsapp-float:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
-        /* ===== MENSAJES ===== */
-        .message {
-            text-align: center;
-            margin-top: var(--space-md);
-            padding: var(--space-sm);
-            border-radius: var(--border-radius-sm);
-            font-weight: 600;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .message.success {
-            background-color: rgba(76, 175, 80, 0.1);
-            color: var(--success-color);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-        }
-
-        .message.error {
-            background-color: rgba(244, 67, 54, 0.1);
-            color: var(--danger-color);
-            border: 1px solid rgba(244, 67, 54, 0.3);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 1200px) {
-            .container-main {
-                grid-template-columns: 1fr;
-                max-width: 800px;
-                gap: var(--space-lg);
-            }
-            
-            .left-panel,
-            .right-panel {
-                display: none;
-            }
-        }
-
-        @media (max-width: 768px) {
-            :root {
-                --space-xl: 2rem;
-                --space-lg: 1.5rem;
-            }
-            
-            body {
-                padding: var(--space-sm);
-            }
-            
-            .form-container {
-                padding: var(--space-lg);
-            }
-            
-            .form-title {
-                font-size: 1.5rem;
-            }
-            
-            .social-container {
-                gap: var(--space-md);
-            }
-            
-            .whatsapp-float {
-                width: 55px;
-                height: 55px;
-                font-size: 1.7rem;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .form-container {
-                padding: var(--space-md);
-            }
-            
-            .form-input,
-            .form-textarea {
-                padding: 12px;
-            }
-            
-            .submit-btn {
-                padding: 14px;
-            }
-            
-            .social-link {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
-        }
-
-        /* ===== ANIMACIONES ADICIONALES ===== */
-        .fade-in {
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        .slide-up {
-            animation: slideUp 0.5s ease forwards;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== EFECTO DE CARGA ===== */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 8px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            background-color: #128c7e;
+            color: white;
         }
     </style>
 </head>
 <body>
 
-<a href="https://wa.me/584129020243" class="whatsapp-float fade-in" target="_blank" aria-label="Contactar por WhatsApp">
-    <i class="bi bi-whatsapp"></i>
-</a>
+    <a href="https://wa.me/584129020243" class="whatsapp-float" target="_blank">
+        <i class="bi bi-whatsapp"></i>
+    </a>
 
-<div class="container-main slide-up">
-    <div class="left-panel">
-        <div class="image-container">
-            <img src="imagenes/1.png" alt="Soporte Técnico">
+    <div class="container-fluid px-4">
+        <div class="row align-items-center justify-content-center">
+            
+            <div class="col-xl-3 d-none d-xl-block">
+                <div class="side-img-container">
+                    <img src="imagenes/1.png" class="side-img" alt="Imagen Izquierda">
+                </div>
+            </div>
+
+            <div class="col-12 col-md-10 col-xl-6">
+                <div class="form-card">
+                    <div class="text-center">
+                        <img src="Header.png" class="header-img" alt="First System Header">
+                        <h2 style="color: #2e7d32; font-weight: 700;">ENTRADA DE EQUIPOS</h2>
+                    </div>
+
+                    <form id="formRegistro" class="mt-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">N° ORDEN</label>
+                                <input name="orden" type="text" class="form-control" placeholder="Ej: 1111" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">VENDEDOR</label>
+                                <input name="vendedor" type="text" class="form-control" placeholder="Nombre" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">N° CONTROL</label>
+                                <input name="control" type="text" class="form-control" placeholder="Ej: 203" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CÓDIGO ARTÍCULO</label>
+                                <input name="codigo" type="text" class="form-control" placeholder="Código">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">DESCRIPCIÓN / EQUIPO</label>
+                            <input name="descripcion" type="text" class="form-control" placeholder="Ej: Laptop Gaming" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">SERIAL</label>
+                                <input name="serial" type="text" class="form-control" placeholder="S/N" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">PROCEDENCIA</label>
+                                <input name="procedencia" type="text" class="form-control" placeholder="Ventas / Cliente">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">FALLA REPORTADA</label>
+                            <textarea name="falla" rows="3" class="form-control" placeholder="Describa el problema..." required></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ACCESORIOS</label>
+                                <input name="accesorios" type="text" class="form-control" placeholder="Cargador, etc.">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">TELÉFONO</label>
+                                <input name="telefono" type="tel" class="form-control" placeholder="Número de contacto">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">CORREO ELECTRÓNICO</label>
+                            <input name="email" type="email" class="form-control" placeholder="cliente@correo.com">
+                        </div>
+
+                        <button class="btn-submit" type="submit">PROCESAR ENTRADA</button>
+
+                        <div class="social-icons text-center mt-4 pt-3 border-top">
+                            <a href="https://facebook.com/firstsystem" target="_blank"><i class="bi bi-facebook"></i></a>
+                            <a href="https://instagram.com/firstsystem" target="_blank"><i class="bi bi-instagram"></i></a>
+                            <a href="https://tiktok.com/@firstsystem" target="_blank"><i class="bi bi-tiktok"></i></a>
+                            <a href="consulta.html" title="Buscar"><i class="bi bi-search"></i></a>
+                        </div>
+
+                        <div id="mensaje" class="text-center mt-3 fw-bold" style="display:none; color: #2e7d32;"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-xl-3 d-none d-xl-block">
+                <div class="side-img-container">
+                    <img src="imagenes/3.png" class="side-img" alt="Imagen Arriba">
+                    <img src="imagenes/2.png" class="side-img" alt="Imagen Abajo">
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="form-container">
-        <div class="company-header">
-            <img src="Header.png" alt="First System Logo" class="company-logo">
-        </div>
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpD2MIOA1r_aSM3ifDU6m86LCufQLnXmkMiGDjX4kU_hSoclHAPc5zanmxZeiKQe6zEw/exec';
+        const form = document.getElementById('formRegistro');
+        const msg = document.getElementById('mensaje');
 
-        <h1 class="form-title">Entrada de Equipos</h1>
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = form.querySelector('button');
+            const originalText = btn.innerText;
+            
+            btn.disabled = true;
+            btn.innerText = "ENVIANDO...";
+            msg.style.display = 'block';
+            msg.textContent = 'Conectando con base de datos...';
 
-        <form id="formRegistro">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">N° ORDEN</label>
-                        <input name="orden" type="text" class="form-input" placeholder="Ej: 1111" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">VENDEDOR</label>
-                        <input name="vendedor" type
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: new FormData(form),
+                mode: 'no-cors'
+            })
+            .then(() => {
+                msg.textContent = '✅ REGISTRO EXITOSO';
+                form.reset();
+                setTimeout(() => { 
+                    msg.style.display = 'none'; 
+                    btn.disabled = false;
+                    btn.innerText = originalText;
+                }, 4000);
+            })
+            .catch(error => {
+                msg.style.color = 'red';
+                msg.textContent = '❌ ERROR DE CONEXIÓN';
+                btn.disabled = false;
+                btn.innerText = originalText;
+            });
+        });
+    </script>
+
+</body>
+</html>
