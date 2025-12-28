@@ -6,7 +6,6 @@
     <title>FIRST SYSTEM - Registro de Equipos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -118,6 +117,7 @@
             overflow: hidden;
             box-shadow: var(--shadow-lg);
             transition: all var(--transition-normal);
+            background: white; /* Fondo blanco por si la imagen tiene transparencia */
         }
 
         .image-container:hover {
@@ -143,23 +143,8 @@
             gap: var(--space-lg);
         }
 
-        .main-image {
-            height: 400px;
-        }
-
-        .main-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .secondary-image {
-            height: 300px;
-        }
-
-        .secondary-image img {
-            width: 100%;
-            height: 100%;
+        /* Clases para controlar altura de imágenes si es necesario */
+        .main-image img, .secondary-image img {
             object-fit: cover;
         }
 
@@ -192,10 +177,11 @@
         }
 
         .company-logo {
-            max-width: 250px;
+            max-width: 100%; /* Ajuste para que no se salga */
             height: auto;
             margin: 0 auto var(--space-md);
             display: block;
+            border-radius: var(--border-radius-md);
         }
 
         .form-title {
@@ -531,17 +517,15 @@
 </a>
 
 <div class="container-main slide-up">
-    <!-- Panel izquierdo: Imagen 1 -->
     <div class="left-panel">
         <div class="image-container">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/1.png" alt="Soporte Técnico">
+            <img src="imagenes/1.png" alt="Soporte Técnico">
         </div>
     </div>
 
-    <!-- Formulario central -->
     <div class="form-container">
         <div class="company-header">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/Header.png" alt="First System Logo" class="company-logo">
+            <img src="Header.png" alt="First System Logo" class="company-logo">
         </div>
 
         <h1 class="form-title">Entrada de Equipos</h1>
@@ -557,170 +541,4 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <label class="input-label">VENDEDOR</label>
-                        <input name="vendedor" type="text" class="form-input" placeholder="Nombre" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">N° CONTROL</label>
-                        <input name="control" type="text" class="form-input" placeholder="Ej: 203" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">CÓDIGO ARTÍCULO</label>
-                        <input name="codigo" type="text" class="form-input" placeholder="Código del artículo">
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">DESCRIPCIÓN / EQUIPO</label>
-                <input name="descripcion" type="text" class="form-input" placeholder="Ej: Laptop Gaming" required>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">SERIAL</label>
-                        <input name="serial" type="text" class="form-input" placeholder="Número de serie" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">PROCEDENCIA</label>
-                        <input name="procedencia" type="text" class="form-input" placeholder="Ventas / Cliente">
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">FALLA REPORTADA</label>
-                <textarea name="falla" rows="3" class="form-textarea" placeholder="Describa el problema en detalle..." required></textarea>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">ACCESORIOS</label>
-                        <input name="accesorios" type="text" class="form-input" placeholder="Cargador, bolso, etc.">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="input-group">
-                        <label class="input-label">TELÉFONO</label>
-                        <input name="telefono" type="tel" class="form-input" placeholder="Número de contacto">
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label class="input-label">CORREO ELECTRÓNICO</label>
-                <input name="email" type="email" class="form-input" placeholder="cliente@correo.com">
-            </div>
-
-            <button class="submit-btn" type="submit">
-                <span class="btn-text">PROCESAR ENTRADA</span>
-            </button>
-
-            <div class="social-container">
-                <a href="https://facebook.com/firstsystem" class="social-link" target="_blank" aria-label="Facebook">
-                    <i class="bi bi-facebook"></i>
-                </a>
-                <a href="https://instagram.com/firstsystem" class="social-link" target="_blank" aria-label="Instagram">
-                    <i class="bi bi-instagram"></i>
-                </a>
-                <a href="https://tiktok.com/@firstsystem" class="social-link" target="_blank" aria-label="TikTok">
-                    <i class="bi bi-tiktok"></i>
-                </a>
-                <a href="consulta.html" class="social-link" aria-label="Consultar Estatus">
-                    <i class="bi bi-search"></i>
-                </a>
-            </div>
-
-            <div id="mensaje" class="message"></div>
-        </form>
-    </div>
-
-    <!-- Panel derecho: Imagen 3 arriba y 2 abajo -->
-    <div class="right-panel">
-        <div class="image-container main-image">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/3.png" alt="Tecnología Principal">
-        </div>
-        <div class="image-container secondary-image">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/2.png" alt="Equipos Tecnológicos">
-        </div>
-    </div>
-</div>
-
-<script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpD2MIOA1r_aSM3ifDU6m86LCufQLnXmkMiGDjX4kU_hSoclHAPc5zanmxZeiKQe6zEw/exec';
-    const form = document.getElementById('formRegistro');
-    const mensaje = document.getElementById('mensaje');
-    const btnText = document.querySelector('.btn-text');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Mostrar estado de carga
-        const originalText = btnText.textContent;
-        btnText.innerHTML = '<span class="loading"></span>PROCESANDO...';
-        form.querySelector('.submit-btn').disabled = true;
-        
-        mensaje.style.display = 'block';
-        mensaje.className = 'message';
-        mensaje.textContent = 'Enviando datos...';
-
-        try {
-            // Enviar datos
-            await fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                body: new FormData(form),
-                mode: 'no-cors'
-            });
-
-            // Mostrar éxito
-            mensaje.className = 'message success';
-            mensaje.innerHTML = '✅ <strong>REGISTRO PROCESADO CON ÉXITO</strong><br><small>Los datos han sido guardados correctamente</small>';
-            
-            // Resetear formulario
-            setTimeout(() => {
-                form.reset();
-                mensaje.style.display = 'none';
-            }, 4000);
-
-        } catch (error) {
-            // Mostrar error
-            mensaje.className = 'message error';
-            mensaje.innerHTML = '❌ <strong>ERROR AL GUARDAR</strong><br><small>Por favor, intente nuevamente</small>';
-            console.error('Error:', error);
-            
-        } finally {
-            // Restaurar botón
-            btnText.textContent = originalText;
-            form.querySelector('.submit-btn').disabled = false;
-            
-            // Ocultar mensaje después de 5 segundos
-            setTimeout(() => {
-                mensaje.style.display = 'none';
-            }, 5000);
-        }
-    });
-
-    // Validación en tiempo real
-    form.querySelectorAll('input[required], textarea[required]').forEach(input => {
-        input.addEventListener('blur', () => {
-            if (!input.value.trim()) {
-                input.style.borderColor = 'var(--danger-color)';
-            } else {
-                input.style.borderColor = 'var(--primary-light)';
-            }
-        });
-    });
-</script>
-
-</body>
-</html>
+                        <input name="vendedor" type
