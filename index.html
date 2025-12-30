@@ -61,13 +61,25 @@
         .full-width { grid-column: span 2; }
         
         label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9em; }
+        
+        /* Estilos Inputs y Selects */
         input, select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Importante para que no se desborde */
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #fff;
         }
+        
+        /* Validación visual */
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
         button {
             background-color: var(--secondary-color);
             color: white;
@@ -103,10 +115,8 @@
             font-size: 0.9em;
         }
 
-        /* Animación */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
@@ -127,16 +137,26 @@
         <form id="formRMA">
             <div class="form-grid">
                 <div>
-                    <label>N° Orden:</label>
-                    <input type="text" name="orden" required placeholder="Ej: 1001">
+                    <label>N° Orden (Solo números):</label>
+                    <input type="number" name="orden" required placeholder="Ej: 1001" min="1">
                 </div>
                 <div>
                     <label>Fecha Recepción:</label>
-                    <input type="text" value="HOY" disabled style="background: #eee;">
+                    <input type="text" value="HOY" disabled style="background: #eee; cursor: not-allowed;">
                 </div>
+                
                 <div>
                     <label>Vendedor/Receptor:</label>
-                    <input type="text" name="vendedor" required>
+                    <select name="vendedor" required>
+                        <option value="" disabled selected>-- Seleccione un Vendedor --</option>
+                        <option value="MAYRA">MAYRA</option>
+                        <option value="HAROLD">HAROLD</option>
+                        <option value="VICTOR">VICTOR</option>
+                        <option value="MAILIN">MAILIN</option>
+                        <option value="VENDEDOR 5">VENDEDOR 5</option>
+                        <option value="VENDEDOR 6">VENDEDOR 6</option>
+                        <option value="VENDEDOR 7">VENDEDOR 7</option>
+                    </select>
                 </div>
                 <div>
                     <label>N° Control:</label>
@@ -164,6 +184,153 @@
                 </div>
                 <div class="full-width">
                     <label>Falla Reportada:</label>
-                    <textarea name="falla" rows="3" required></textarea>
+                    <textarea name="falla" rows="3" required placeholder="Describa el problema detalladamente..."></textarea>
                 </div>
-                <div class="full-width" style="border-top: 1px solid #eee; margin-top: 10
+                
+                <div class="full-width" style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
+                    <strong>Datos del Cliente</strong>
+                </div>
+                <div>
+                    <label>Nombre Cliente:</label>
+                    <input type="text" name="recepcion">
+                </div>
+                <div>
+                    <label>Teléfono:</label>
+                    <input type="tel" name="telefono" placeholder="Ej: 0414-1234567">
+                </div>
+                <div class="full-width">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" name="email" placeholder="cliente@ejemplo.com">
+                </div>
+            </div>
+            <button type="submit" id="btnGuardar">Guardar Orden</button>
+        </form>
+        <p id="mensajeRegistro" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
+    </div>
+
+    <div id="consulta" class="tab-content">
+        <div class="search-box">
+            <input type="text" id="txtBuscar" placeholder="Ingrese N° Orden, Serial o Control">
+            <button onclick="buscarOrden()" style="width: auto; margin: 0;">Buscar</button>
+        </div>
+        <p id="loading" style="display:none; text-align:center;">Buscando...</p>
+
+        <div id="resultado" class="result-card">
+            <h3 style="margin-top:0;">Detalles de la Orden: <span id="resOrden"></span></h3>
+            <p><strong>Equipo:</strong> <span id="resEquipo"></span></p>
+            <p><strong>Fecha Entrada:</strong> <span id="resFecha"></span></p>
+            <p><strong>Diagnóstico Técnico:</strong> <span id="resDiagnostico"></span></p>
+            <hr>
+            <p style="font-size: 1.2em;">Estatus Actual: <span id="resEstatus" class="status-badge"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // URL DE TU SCRIPT DE GOOGLE APPS SCRIPT
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwD-Rv-JtRXH4ihnX4SdV3WWqmP3SADNNdQvU2Y_PxwEtMZfCgA7tD48vqvITzSFMNL/exec";
+
+    // --- FUNCIÓN 1: REGISTRAR (POST) ---
+    const form = document.getElementById('formRMA');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const btn = document.getElementById('btnGuardar');
+        const msg = document.getElementById('mensajeRegistro');
+        
+        // Validación extra simple antes de enviar
+        const vendedor = form.vendedor.value;
+        if (vendedor === "") {
+            alert("Por favor seleccione un vendedor de la lista.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Guardando...";
+        msg.innerText = "";
+
+        const formData = new FormData(form);
+        
+        fetch(URL_SCRIPT, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            msg.innerText = "¡Orden guardada exitosamente!";
+            msg.style.color = "green";
+            form.reset();
+            // Resetear el select manualmente al valor por defecto
+            form.vendedor.value = "";
+        })
+        .catch(error => {
+            msg.innerText = "Error al guardar. Intente nuevamente.";
+            msg.style.color = "red";
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerText = "Guardar Orden";
+        });
+    });
+
+    // --- FUNCIÓN 2: CONSULTAR (GET) ---
+    function buscarOrden() {
+        const input = document.getElementById('txtBuscar').value;
+        const loading = document.getElementById('loading');
+        const resultadoDiv = document.getElementById('resultado');
+
+        if(!input) return alert("Escribe un número de orden o serial");
+
+        loading.style.display = 'block';
+        resultadoDiv.style.display = 'none';
+
+        const urlConsulta = URL_SCRIPT + "?accion=consultar&dato=" + encodeURIComponent(input);
+
+        fetch(urlConsulta)
+        .then(response => response.json())
+        .then(data => {
+            loading.style.display = 'none';
+            if(data.estado === "ok") {
+                document.getElementById('resOrden').innerText = data.orden;
+                document.getElementById('resEquipo').innerText = data.descripcion;
+                
+                let fecha = new Date(data.fecha_recepcion);
+                document.getElementById('resFecha').innerText = fecha.toLocaleDateString();
+                
+                document.getElementById('resDiagnostico').innerText = data.tecnico_reporte || "Sin diagnóstico aún";
+                document.getElementById('resEstatus').innerText = data.estatus;
+                
+                const badge = document.getElementById('resEstatus');
+                if(data.estatus === "LISTO" || data.estatus === "ENTREGADO") badge.style.background = "#27ae60"; 
+                else if(data.estatus === "PENDIENTE") badge.style.background = "#e67e22"; 
+                else badge.style.background = "#3498db"; 
+
+                resultadoDiv.style.display = 'block';
+            } else {
+                alert("No se encontró ninguna orden con ese dato.");
+            }
+        })
+        .catch(error => {
+            loading.style.display = 'none';
+            alert("Error de conexión al buscar.");
+        });
+    }
+
+    // --- UTILIDAD: PESTAÑAS ---
+    function openTab(tabName) {
+        var i, x, tablinks;
+        x = document.getElementsByClassName("tab-content");
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < x.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        event.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
