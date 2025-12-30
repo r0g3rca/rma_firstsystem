@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Técnico RMA</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .navbar { background: #2c3e50; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; background: #34495e; padding: 8px 15px; border-radius: 4px; font-size: 0.9rem; }
+        .navbar a:hover { background: #e74c3c; } /* Rojo para indicar salida */
+
+        .main-container { max-width: 800px; margin: 30px auto; width: 95%; }
+
+        /* Login Modal */
+        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #login-modal input { padding: 10px; font-size: 18px; border-radius: 5px; border: none; margin-bottom: 10px; text-align: center; }
+        #login-modal button { padding: 10px 20px; font-size: 18px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+        /* Tarjetas */
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .header-img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px 8px 0 0; display: block; margin-bottom: 20px; }
+
+        h2 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        
+        /* Grid de Info */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: #eef2f3; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        .info-item strong { display: block; color: #7f8c8d; font-size: 0.85rem; }
+        .info-item span { font-weight: bold; color: #2c3e50; font-size: 1.1rem; }
+
+        /* Formulario Técnico */
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #2c3e50; }
+        textarea, select, input[type="text"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; margin-bottom: 15px; }
+        textarea { resize: vertical; min-height: 100px; }
+        
+        button.btn-action { width: 100%; padding: 15px; background: #2980b9; color: white; font-size: 18px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button.btn-action:hover { opacity: 0.9; }
+        button.btn-success { background: #27ae60; }
+        
+        footer { background-color: #2c3e50; color: white; text-align: center; padding: 15px; font-size: 0.9rem; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <div id="login-modal">
+        <h2 style="color:white;">Acceso Técnico</h2>
+        <input type="password" id="passInput" placeholder="Contraseña">
+        <button onclick="verificarAcceso()">Entrar</button>
+    </div>
+
+    <div class="navbar">
+        <span style="color:white; font-weight:bold;">Panel de Técnicos</span>
+        <a href="index.html">Salir / Home</a>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="card">
+            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/Header.png" alt="Header" class="header-img">
+            <h2>Buscar Orden para Editar</h2>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="txtBuscar" placeholder="N° Orden (Ej: 1001)" style="margin-bottom: 0;">
+                <button class="btn-action" onclick="buscarOrden()" style="width: auto;">Buscar</button>
+            </div>
+            <p id="loading" style="display:none; color:#3498db; font-weight:bold; margin-top:10px;">Cargando datos...</p>
+        </div>
+
+        <div id="editor-area" class="card" style="display: none;">
+            <h2>Editando Orden #<span id="lblOrden"></span></h2>
+            
+            <div class="info-grid">
+                <div class="info-item"><strong>Equipo:</strong> <span id="lblEquipo"></span></div>
+                <div class="info-item"><strong>Fecha Ingreso:</strong> <span id="lblFecha"></span></div>
+                <div class="info-item" style="grid-column: span 2;">
+                    <strong>Falla reportada por cliente:</strong>
+                    <span id="lblFallaCliente" style="color:#c0392b;"></span>
+                </div>
+            </div>
+
+            <form id="formTecnico">
+                <input type="hidden" name="orden" id="hiddenOrden">
+                <input type="hidden" name="accion" value="editar"> <label>Diagnóstico / Trabajo Realizado:</label>
+                <textarea name="diagnostico" id="txtDiagnostico" placeholder="Escriba el diagnóstico técnico, piezas cambiadas, etc..."></textarea>
+
+                <label>Estatus Actual:</label>
+                <select name="estatus" id="selEstatus" required>
+                    <option value="PENDIENTE">PENDIENTE (En espera)</option>
+                    <option value="REVISANDO">REVISANDO (En taller)</option>
+                    <option value="EN ESPERA REPUESTO">EN ESPERA REPUESTO</option>
+                    <option value="LISTO">LISTO (Para retirar)</option>
+                    <option value="ENTREGADO">ENTREGADO (Cerrado)</option>
+                </select>
+
+                <button type="submit" id="btnGuardar" class="btn-action btn-success">Guardar Cambios</button>
+            </form>
+            <p id="mensaje" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 Sistema RMA - Uso exclusivo personal técnico
+    </footer>
+
+    <script>
+        // --- 1. CONFIGURACIÓN ---
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwD-Rv-JtRXH4ihnX4SdV3WWqmP3SADNNdQvU2Y_PxwEtMZfCgA7tD48vqvITzSFMNL/exec";
+        const PASSWORD_TECNICO = "admin123"; // CAMBIA ESTO POR LA CLAVE QUE QUIERAS
+
+        // --- 2. SEGURIDAD ---
+        function verificarAcceso() {
+            const pass = document.getElementById('passInput').value;
+            if (pass === PASSWORD_TECNICO) {
+                document.getElementById('login-modal').style.display = 'none';
+            } else {
+                alert("Contraseña incorrecta");
+            }
+        }
+
+        // --- 3. BUSCAR DATOS ---
+        function buscarOrden() {
+            const orden = document.getElementById('txtBuscar').value;
+            const loading = document.getElementById('loading');
+            const editor = document.getElementById('editor-area');
+
+            if (!orden) return alert("Ingrese número de orden");
+
+            loading.style.display = 'block';
+            editor.style.display = 'none';
+
+            fetch(URL_SCRIPT + "?accion=consultar&dato=" + encodeURIComponent(orden))
+            .then(r => r.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if (data.estado === "ok") {
+                    // Llenar datos visuales
+                    document.getElementById('lblOrden').innerText = data.orden;
+                    document.getElementById('lblEquipo').innerText = data.descripcion;
+                    document.getElementById('lblFallaCliente').innerText = data.falla_cliente;
+                    
+                    let f = new Date(data.fecha_recepcion);
+                    document.getElementById('lblFecha').innerText = f.toLocaleDateString();
+
+                    // Llenar formulario editable
+                    document.getElementById('hiddenOrden').value = data.orden;
+                    document.getElementById('txtDiagnostico').value = data.tecnico_reporte || "";
+                    document.getElementById('selEstatus').value = data.estatus;
+
+                    editor.style.display = 'block';
+                } else {
+                    alert("Orden no encontrada.");
+                }
+            });
+        }
+
+        // --- 4. GUARDAR CAMBIOS (EDITAR) ---
+        const form = document.getElementById('formTecnico');
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('btnGuardar');
+            const msg = document.getElementById('mensaje');
+
+            btn.disabled = true;
+            btn.innerText = "Guardando...";
+            msg.innerText = "";
+
+            const formData = new FormData(form);
+
+            fetch(URL_SCRIPT, { method: 'POST', body: formData })
+            .then(r => r.text())
+            .then(txt => {
+                msg.innerText = "¡Orden Actualizada Correctamente!";
+                msg.style.color = "green";
+                setTimeout(() => { 
+                    document.getElementById('editor-area').style.display = 'none';
+                    document.getElementById('txtBuscar').value = "";
+                    msg.innerText = "";
+                }, 2000);
+            })
+            .catch(err => {
+                msg.innerText = "Error al actualizar";
+                msg.style.color = "red";
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerText = "Guardar Cambios";
+            });
+        });
+    </script>
+</body>
+</html>
