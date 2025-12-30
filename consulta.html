@@ -3,493 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIRST SYSTEM - Consulta de Estatus</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>Consulta de Reparación</title>
     <style>
-        /* ===== VARIABLES CSS ===== */
-        :root {
-            /* Colores principales */
-            --primary-color: #2e7d32;
-            --primary-light: #58bc82;
-            --primary-dark: #1b5e20;
-            --accent-color: #45a56b;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --danger-color: #f44336;
-            --info-color: #2196f3;
-            
-            /* Colores neutrales */
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --border-color: #e2e8f0;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            
-            /* Espaciado */
-            --space-xs: 0.5rem;
-            --space-sm: 1rem;
-            --space-md: 1.5rem;
-            --space-lg: 2rem;
-            --space-xl: 3rem;
-            
-            /* Bordes */
-            --border-radius-sm: 8px;
-            --border-radius-md: 12px;
-            --border-radius-lg: 20px;
-            --border-radius-xl: 30px;
-            
-            /* Sombras */
-            --shadow-sm: 0 2px 8px var(--shadow-color);
-            --shadow-md: 0 10px 25px var(--shadow-color);
-            --shadow-lg: 0 15px 35px var(--shadow-color);
-            
-            /* Transiciones */
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.3s ease;
-            --transition-slow: 0.5s ease;
-            
-            /* Fuentes */
-            --font-primary: 'Poppins', sans-serif;
-            --font-secondary: 'Montserrat', sans-serif;
-        }
-
-        /* ===== RESET Y ESTILOS BASE ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: var(--font-primary);
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: linear-gradient(135deg, #f3f4f7 0%, #e8f5e9 100%);
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6; 
+            margin: 0; 
+            padding: 0; 
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            padding: var(--space-md);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(88, 188, 130, 0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(46, 125, 50, 0.1) 0%, transparent 40%);
-            z-index: -1;
-        }
-
-        /* ===== CONTENEDOR PRINCIPAL ===== */
-        .container-main {
-            max-width: 650px;
-            width: 100%;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ===== FORMULARIO DE CONSULTA ===== */
-        .form-container {
-            background: var(--bg-white);
-            border-radius: var(--border-radius-lg);
-            padding: var(--space-xl);
-            box-shadow: var(--shadow-lg);
-            border: 1px solid rgba(88, 188, 130, 0.2);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .form-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
-        }
-
-        .company-header {
-            text-align: center;
-            margin-bottom: var(--space-lg);
-        }
-
-        .company-logo {
-            max-width: 250px;
-            height: auto;
-            margin: 0 auto var(--space-md);
-            display: block;
-            border-radius: var(--border-radius-sm);
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-        }
-
-        .form-title {
-            text-align: center;
-            color: var(--primary-color);
-            font-family: var(--font-secondary);
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: var(--space-lg);
-            position: relative;
-            padding-bottom: var(--space-sm);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .form-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
-        }
-
-        /* ===== INPUT DE CONSULTA ===== */
-        .input-group {
-            position: relative;
-            margin-bottom: var(--space-lg);
-        }
-
-        .input-label {
-            position: absolute;
-            top: -10px;
-            left: 12px;
-            font-size: 0.8rem;
-            color: var(--primary-color);
-            font-weight: 600;
-            background: var(--bg-white);
-            padding: 0 var(--space-xs);
-            z-index: 2;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 1rem;
-            background-color: var(--bg-light);
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius-md);
-            outline: none;
-            transition: all var(--transition-fast);
-            font-family: var(--font-primary);
-            text-align: center;
-        }
-
-        .form-input:focus {
-            border-color: var(--primary-light);
-            background-color: var(--bg-white);
-            box-shadow: 0 0 0 3px rgba(88, 188, 130, 0.1);
-        }
-
-        /* ===== BOTÓN DE CONSULTA ===== */
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
-            color: white;
-            border: none;
-            border-radius: var(--border-radius-xl);
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all var(--transition-normal);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            margin-bottom: var(--space-lg);
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(88, 188, 130, 0.3);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* ===== TICKET DE RESULTADO ===== */
-        .ticket-result {
-            display: none;
-            margin-top: var(--space-lg);
-            padding: var(--space-md);
-            border: 2px dashed var(--primary-light);
-            border-radius: var(--border-radius-lg);
-            background-color: var(--bg-white);
-        }
-
-        .status-badge {
-            display: block;
-            text-align: center;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            margin-bottom: var(--space-md);
-            text-transform: uppercase;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 4px;
-        }
-
-        .data-label { 
-            color: var(--text-light); 
-            font-weight: 600; 
         }
         
-        .data-value { 
-            color: var(--text-dark); 
-            font-weight: 500;
+        /* BARRA SUPERIOR (NAVBAR) */
+        .navbar { background: #2c3e50; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { 
+            color: white; 
+            text-decoration: none; 
+            font-weight: bold; 
+            background: #34495e; 
+            padding: 8px 15px; 
+            border-radius: 4px; 
+            font-size: 0.9rem;
+            transition: 0.3s;
         }
+        .navbar a:hover { background: #1abc9c; }
 
-        /* ===== REDES SOCIALES ===== */
-        .social-container {
+        /* LAYOUT PRINCIPAL (3 COLUMNAS) */
+        .main-wrapper {
             display: flex;
             justify-content: center;
-            gap: var(--space-lg);
-            margin-top: var(--space-lg);
-            padding-top: var(--space-lg);
-            border-top: 1px solid var(--border-color);
+            align-items: flex-start; /* Alineación superior */
+            gap: 20px;
+            padding: 20px;
+            flex: 1; 
         }
 
-        .social-link {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-light);
-            border-radius: 50%;
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            transition: all var(--transition-normal);
-            text-decoration: none;
+        /* IMÁGENES LATERALES */
+        .side-banner {
+            width: 300px; 
+            height: auto;
+            max-height: 600px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        .social-link:hover {
-            transform: translateY(-3px);
-            background: var(--primary-light);
+        /* TARJETA CENTRAL DE BÚSQUEDA */
+        .search-card { 
+            flex: 1;
+            max-width: 600px; /* Un poco más ancho para que se vea bien */
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+            text-align: center;
+        }
+
+        /* IMAGEN HEADER */
+        .card-header-img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-body { padding: 30px; }
+
+        h1 { margin-top: 0; color: #2c3e50; font-size: 1.5rem; }
+        p { color: #777; margin-bottom: 25px; }
+
+        /* INPUTS Y BOTONES */
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            font-size: 18px; 
+            border: 2px solid #ddd; 
+            border-radius: 30px; 
+            text-align: center; 
+            box-sizing: border-box; 
+            margin-bottom: 15px; 
+            transition: 0.3s; 
+        }
+        input:focus { border-color: #3498db; outline: none; }
+
+        button { 
+            width: 100%; 
+            padding: 15px; 
+            background: #3498db; 
+            color: white; 
+            font-size: 18px; 
+            border: none; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: 0.3s; 
+        }
+        button:hover { background: #2980b9; }
+
+        /* RESULTADOS */
+        .result-box { 
+            margin-top: 30px; 
+            text-align: left; 
+            background: #f9f9f9; 
+            padding: 20px; 
+            border-radius: 8px; 
+            display: none; 
+            border: 1px solid #eee; 
+        }
+        .status-badge { 
+            display: inline-block; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            color: white; 
+            font-weight: bold; 
+            font-size: 0.9em; 
+            margin-left: 10px; 
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #2c3e50;
             color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            margin-top: auto;
         }
 
-        /* ===== WHATSAPP FLOAT ===== */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            text-decoration: none;
-            transition: all var(--transition-normal);
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(37, 211, 102, 0.4);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            :root {
-                --space-xl: 2rem;
-                --space-lg: 1.5rem;
-            }
-            
-            body {
-                padding: var(--space-sm);
-            }
-            
-            .form-container {
-                padding: var(--space-lg);
-            }
-            
-            .form-title {
-                font-size: 1.5rem;
-            }
-            
-            .social-container {
-                gap: var(--space-md);
-            }
-            
-            .whatsapp-float {
-                width: 55px;
-                height: 55px;
-                font-size: 1.7rem;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .form-container {
-                padding: var(--space-md);
-            }
-            
-            .form-input {
-                padding: 12px;
-            }
-            
-            .submit-btn {
-                padding: 14px;
-            }
-            
-            .social-link {
-                width: 40px;
-                height: 40px;
-                font-size: 1.1rem;
-            }
+        /* RESPONSIVE: OCULTAR IMÁGENES LATERALES EN MÓVIL */
+        @media (max-width: 1100px) {
+            .side-banner { display: none; } 
+            .main-wrapper { padding: 10px; }
         }
     </style>
 </head>
-<body>
-
-<a href="https://wa.me/584129020243" class="whatsapp-float" target="_blank">
-    <i class="bi bi-whatsapp"></i>
-</a>
-
-<div class="container-main">
-    <div class="form-container">
-        <div class="company-header">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/Header.png" alt="First System Logo" class="company-logo">
-        </div>
-
-        <h1 class="form-title">Consulta de Estatus</h1>
-
-        <div class="input-group">
-            <label class="input-label">INGRESE N° DE ORDEN</label>
-            <input type="text" id="inputOrden" class="form-input" placeholder="Ej: 1111">
-        </div>
-
-        <button class="submit-btn" onclick="consultarOrden()">Consultar Ahora</button>
-
-        <!-- TICKET DE RESULTADO (igual al original) -->
-        <div id="ticket" class="ticket-result">
-            <div id="estatusBadge" class="status-badge"></div>
-            <div class="data-row"><span class="data-label">Orden:</span> <span class="data-value" id="res-orden"></span></div>
-            <div class="data-row"><span class="data-label">Equipo:</span> <span class="data-value" id="res-equipo"></span></div>
-            <div class="data-row"><span class="data-label">Serial:</span> <span class="data-value" id="res-serial"></span></div>
-            <div class="data-row"><span class="data-label">Falla:</span> <span class="data-value" id="res-falla"></span></div>
-            <div class="mt-3 p-2 bg-light rounded shadow-sm">
-                <small class="data-label d-block mb-1">Diagnóstico Técnico:</small>
-                <span id="res-diagnostico" class="data-value" style="font-style: italic;"></span>
-            </div>
-        </div>
-
-        <div class="social-container">
-            <a href="index.html" title="Volver al Registro"><i class="bi bi-house-door"></i></a>
-            <a href="https://facebook.com/firstsystem" target="_blank"><i class="bi bi-facebook"></i></a>
-            <a href="https://instagram.com/firstsystem" target="_blank"><i class="bi bi-instagram"></i></a>
-        </div>
-    </div>
-</div>
-
-<script>
-    // URL ACTUALIZADA con tu nuevo Google Apps Script
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJ0t1eRhbvFYSqlwFxzi2faXc0A9Rc4mnasyFJCc7qc422fhK9mVXzIGd3_3w6BnTV0Q/exec';
-
-    async function consultarOrden() {
-        const orden = document.getElementById('inputOrden').value.trim();
-        const ticket = document.getElementById('ticket');
-        const btn = document.querySelector('.submit-btn');
-
-        if (!orden) {
-            alert("Por favor, ingrese un número de orden.");
-            return;
-        }
-
-        btn.disabled = true;
-        btn.textContent = "Buscando...";
-        ticket.style.display = 'none';
-
-        try {
-            // Hacer la petición con el parámetro "orden" (en español)
-            const response = await fetch(`${SCRIPT_URL}?orden=${encodeURIComponent(orden)}`);
-            
-            // Verificar si la respuesta es OK
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
-            }
-            
-            // Intentar parsear la respuesta como JSON
-            const data = await response.json();
-
-            if (data && data.orden) {
-                document.getElementById('res-orden').textContent = data.orden;
-                document.getElementById('res-equipo').textContent = data.descripcion;
-                document.getElementById('res-serial').textContent = data.serial;
-                document.getElementById('res-falla').textContent = data.falla;
-                document.getElementById('res-diagnostico').textContent = data.detalle || "En revisión...";
-
-                const badge = document.getElementById('estatusBadge');
-                badge.textContent = data.estatus || "PENDIENTE";
-                
-                // Colores según estatus (igual al original)
-                if (data.estatus === 'ENTREGADO') {
-                    badge.style.backgroundColor = '#d1e7dd';
-                    badge.style.color = '#0f5132';
-                } else if (data.estatus === 'EN PROCESO') {
-                    badge.style.backgroundColor = '#fff3cd';
-                    badge.style.color = '#856404';
-                } else {
-                    badge.style.backgroundColor = '#f8d7da';
-                    badge.style.color = '#721c24';
-                }
-
-                ticket.style.display = 'block';
-            } else {
-                alert("Orden no encontrada. Verifique el número.");
-            }
-        } catch (e) {
-            console.error("Error de conexión:", e);
-            alert("Error de conexión con el sistema. Intente nuevamente.");
-        } finally {
-            btn.disabled = false;
-            btn.textContent = "Consultar Ahora";
-        }
-    }
-
-    // Permitir consultar con Enter
-    document.getElementById('inputOrden').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            consultarOrden();
-        }
-    });
-</script>
-</body>
-</html>
