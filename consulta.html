@@ -3,83 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Reparación</title>
+    <title>Consulta de Reparación - Soporte CRJ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif; 
             background-color: #f4f7f6; 
-            margin: 0; 
-            padding: 0; 
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            margin: 0; padding: 0; 
+            display: flex; flex-direction: column; min-height: 100vh; 
         }
         
+        /* NAVBAR */
         .navbar { background: #2c3e50; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
         .navbar a { 
-            color: white; 
-            text-decoration: none; 
-            font-weight: bold; 
-            background: #34495e; 
-            padding: 8px 15px; 
-            border-radius: 4px; 
-            font-size: 0.9rem;
-            transition: 0.3s;
+            color: white; text-decoration: none; font-weight: bold; 
+            background: #34495e; padding: 8px 15px; border-radius: 4px; 
+            font-size: 0.9rem; transition: 0.3s;
         }
         .navbar a:hover { background: #1abc9c; }
 
+        /* LAYOUT */
         .main-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 20px;
-            padding: 20px;
-            flex: 1; 
+            display: flex; justify-content: center; align-items: flex-start;
+            gap: 20px; padding: 20px; flex: 1; 
         }
 
-        /* IMÁGENES LATERALES */
         .side-banner {
-            width: 300px; 
-            height: auto;
-            max-height: 600px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 300px; height: auto; max-height: 600px; object-fit: cover;
+            border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .search-card { 
-            flex: 1;
-            max-width: 600px;
-            background: white; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            overflow: hidden; 
-            text-align: center;
+            flex: 1; max-width: 600px; background: white; 
+            border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+            overflow: hidden; text-align: center;
         }
 
-        /* CORRECCIÓN: Header.png está en la raíz, no en carpetas */
         .card-header-img {
-            width: 100%;
-            height: auto;
-            max-height: 150px;
-            object-fit: cover;
-            display: block;
+            width: 100%; height: auto; max-height: 150px; object-fit: cover; display: block;
         }
 
         .card-body { padding: 30px; }
+
         h1 { margin-top: 0; color: #2c3e50; font-size: 1.5rem; }
         p { color: #777; margin-bottom: 25px; }
 
-        input { width: 100%; padding: 15px; font-size: 18px; border: 2px solid #ddd; border-radius: 30px; text-align: center; box-sizing: border-box; margin-bottom: 15px; transition: 0.3s; }
+        input { 
+            width: 100%; padding: 15px; font-size: 18px; 
+            border: 2px solid #ddd; border-radius: 30px; 
+            text-align: center; box-sizing: border-box; 
+            margin-bottom: 15px; transition: 0.3s; 
+        }
         input:focus { border-color: #3498db; outline: none; }
 
-        button { width: 100%; padding: 15px; background: #3498db; color: white; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        button { 
+            width: 100%; padding: 15px; background: #3498db; 
+            color: white; font-size: 18px; border: none; 
+            border-radius: 30px; cursor: pointer; font-weight: bold; 
+            transition: 0.3s; 
+        }
         button:hover { background: #2980b9; }
 
-        .result-box { margin-top: 30px; text-align: left; background: #f9f9f9; padding: 20px; border-radius: 8px; display: none; border: 1px solid #eee; }
-        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; font-size: 0.9em; margin-left: 10px; }
+        /* RESULTADOS */
+        .result-box { 
+            margin-top: 30px; text-align: left; background: #f9f9f9; 
+            padding: 20px; border-radius: 8px; display: none; border: 1px solid #eee; 
+        }
+        .status-badge { 
+            display: inline-block; padding: 5px 15px; border-radius: 20px; 
+            color: white; font-weight: bold; font-size: 0.9em; margin-left: 10px; 
+        }
 
-        footer { background-color: #2c3e50; color: white; text-align: center; padding: 15px; font-size: 0.9rem; margin-top: auto; }
+        /* CAJA DE ERROR (NO ENCONTRADO) */
+        .error-box {
+            display: none; /* Oculto por defecto */
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 8px;
+            animation: fadeIn 0.5s;
+        }
+        .error-box h3 { color: #c0392b; margin-top: 0; }
+        .error-box p { color: #555; }
+        
+        .btn-register-redirect {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn-register-redirect:hover { background-color: #2ecc71; }
+
+        /* FOOTER */
+        footer {
+            background-color: #2c3e50; color: white; text-align: center; padding: 25px 20px;
+            font-size: 0.9rem; margin-top: auto; display: flex; flex-direction: column; gap: 15px;
+        }
+        
+        .social-icons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        
+        .social-btn { 
+            display: flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 20px; 
+            text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; 
+        }
+
+        .tiktok { background-color: #000000; border: 1px solid #333; }
+        .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .facebook { background-color: #1877F2; }
+        .youtube { background-color: #FF0000; }
+        
+        .social-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .copyright-text { font-size: 0.85rem; opacity: 0.8; margin-top: 5px; }
+        .tech-link { color: #7f8c8d; text-decoration: none; font-size: 1.2rem; margin-top: 5px; transition: 0.3s; }
+        .tech-link:hover { color: #fff; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 1100px) {
             .side-banner { display: none; } 
@@ -105,13 +150,18 @@
                 <p>Ingrese su número de Orden, Serial o Control</p>
                 
                 <input type="text" id="txtBuscar" placeholder="Ej: 1001 ó SN12345">
+                
                 <button onclick="buscarOrden()" id="btnBuscar">Consultar Estatus</button>
                 <p id="loading" style="display:none; margin-top:10px; color:#3498db;">🔍 Buscando información...</p>
 
                 <div id="resultado" class="result-box">
                     <h3 style="margin: 0 0 10px 0; color: #2c3e50;">Orden #<span id="resOrden"></span></h3>
-                    <div style="margin-bottom: 10px;"><strong>Equipo:</strong> <span id="resEquipo"></span></div>
-                    <div style="margin-bottom: 10px;"><strong>Fecha Entrada:</strong> <span id="resFecha"></span></div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Equipo:</strong> <span id="resEquipo"></span>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Fecha Entrada:</strong> <span id="resFecha"></span>
+                    </div>
                     <div style="margin-bottom: 15px;">
                         <strong>Diagnóstico Técnico:</strong> <br>
                         <span id="resDiagnostico" style="color: #555; font-style: italic;"></span>
@@ -120,6 +170,15 @@
                         Estatus Actual: <span id="resEstatus" class="status-badge"></span>
                     </div>
                 </div>
+
+                <div id="errorBox" class="error-box">
+                    <i class="fas fa-search-minus" style="font-size: 40px; color: #e74c3c; margin-bottom: 10px;"></i>
+                    <h3>Orden no encontrada</h3>
+                    <p>No existe ninguna orden con ese número o serial.</p>
+                    <p>¿Deseas registrar este equipo?</p>
+                    <a href="index.html" class="btn-register-redirect">Ir a Registrar Equipo</a>
+                </div>
+
             </div>
         </div>
 
@@ -127,22 +186,54 @@
     </div>
 
     <footer>
-        &copy; 2025 Sistema de Gestión RMA - Consulta de Clientes
+        <div class="social-icons">
+            <a href="https://www.tiktok.com/@soportecrj" target="_blank" class="social-btn tiktok">
+                <i class="fab fa-tiktok"></i> TikTok
+            </a>
+            <a href="https://www.instagram.com/soportecrj/" target="_blank" class="social-btn instagram">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="https://www.facebook.com/ventascrj" target="_blank" class="social-btn facebook">
+                <i class="fab fa-facebook"></i> Facebook
+            </a>
+            <a href="https://www.youtube.com/@soportecrj" target="_blank" class="social-btn youtube">
+                <i class="fab fa-youtube"></i> YouTube
+            </a>
+        </div>
+        
+        <div class="copyright-text">
+            &copy; 2025 SOPORTE CRJ, C.A. J407133640 - Todos los derechos reservados.
+        </div>
+        
+        <a href="tecnico.html" class="tech-link" title="Acceso Técnicos">
+            <i class="fas fa-lock"></i>
+        </a>
     </footer>
 
     <script>
         const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbw21831tWm9MtbRzS_Wbz7VcCkXHymbH0aWbamtR8nI4c-xzcI3dM0rZrHMRmrx4l_xoA/exec";
 
+        // ENTER KEY
+        document.getElementById("txtBuscar").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); 
+                buscarOrden(); 
+            }
+        });
+
         function buscarOrden() {
             const input = document.getElementById('txtBuscar').value;
             const loading = document.getElementById('loading');
             const resBox = document.getElementById('resultado');
+            const errBox = document.getElementById('errorBox'); // NUEVA CAJA DE ERROR
             const btn = document.getElementById('btnBuscar');
 
             if(!input) return alert("Por favor ingrese un número de orden o serial");
 
+            // Reset visual
             loading.style.display = 'block';
             resBox.style.display = 'none';
+            errBox.style.display = 'none'; // Ocultamos error previo
             btn.disabled = true;
             btn.innerText = "Buscando...";
 
@@ -154,11 +245,14 @@
                 btn.innerText = "Consultar Estatus";
                 
                 if(data.estado === "ok") {
+                    // ÉXITO: Mostramos la caja de resultados
                     document.getElementById('resOrden').innerText = data.orden;
                     document.getElementById('resEquipo').innerText = data.descripcion;
+                    
                     let f = new Date(data.fecha_recepcion);
                     document.getElementById('resFecha').innerText = f.toLocaleDateString();
-                    document.getElementById('resDiagnostico').innerText = data.tecnico_reporte || "En espera de revisión...";
+                    
+                    document.getElementById('resDiagnostico').innerText = data.tecnico_reporte || "En espera de revisión técnica...";
                     
                     const badge = document.getElementById('resEstatus');
                     badge.innerText = data.estatus;
@@ -170,9 +264,11 @@
                     } else {
                         badge.style.background = "#2980b9"; 
                     }
+
                     resBox.style.display = 'block';
                 } else {
-                    alert("No se encontró ninguna orden con ese dato.");
+                    // ERROR: Mostramos la caja de "No encontrado"
+                    errBox.style.display = 'block';
                 }
             })
             .catch(e => {
@@ -183,5 +279,6 @@
             });
         }
     </script>
+
 </body>
 </html>
