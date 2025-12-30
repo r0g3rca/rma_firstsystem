@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dejar Comentario - Soporte CRJ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* (MISMOS ESTILOS QUE ANTES, SIN CAMBIOS AQUÍ) */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .navbar { background: #2c3e50; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: white; text-decoration: none; font-weight: bold; background: #34495e; padding: 8px 15px; border-radius: 4px; font-size: 0.9rem; transition: 0.3s; }
+        .navbar a:hover { background: #1abc9c; }
+        .main-wrapper { display: flex; justify-content: center; align-items: flex-start; gap: 20px; padding: 20px; flex: 1; }
+        .side-banner { width: 300px; height: auto; max-height: 600px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .form-container { flex: 1; max-width: 600px; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; text-align: center; }
+        .form-header-img { width: 100%; height: auto; display: block; max-height: 200px; object-fit: cover; }
+        .form-content { padding: 30px; }
+        h1 { color: #2c3e50; margin-top: 0; }
+        p { color: #7f8c8d; margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; font-size: 16px; }
+        textarea { resize: vertical; min-height: 100px; }
+        .rating { display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; margin-bottom: 20px; }
+        .rating input { display: none; }
+        .rating label { cursor: pointer; font-size: 35px; color: #ddd; transition: 0.2s; }
+        .rating input:checked ~ label, .rating label:hover, .rating label:hover ~ label { color: #f1c40f; }
+        .btn-save { background-color: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .btn-save:hover { background-color: #2ecc71; }
+        footer { background-color: #2c3e50; color: white; text-align: center; padding: 25px 20px; font-size: 0.9rem; margin-top: auto; display: flex; flex-direction: column; gap: 15px; }
+        .social-icons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .social-btn { display: flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 20px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .tiktok { background-color: #000000; border: 1px solid #333; }
+        .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        .facebook { background-color: #1877F2; }
+        .youtube { background-color: #FF0000; }
+        .social-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .copyright-text { font-size: 0.85rem; opacity: 0.8; }
+        .float-wa { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
+        .float-wa:hover { background-color: #20ba5a; transform: scale(1.1); }
+        @media (max-width: 1100px) { .side-banner { display: none; } .main-wrapper { padding: 10px; } }
+
+        /* NUEVO: ESTILO PARA EL BOTÓN DE GOOGLE QUE APARECERÁ AL FINAL */
+        #btnGoogle {
+            display: none; /* Oculto al inicio */
+            background-color: #4285F4;
+            color: white;
+            padding: 15px;
+            margin-top: 15px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+        #btnGoogle:hover { background-color: #357ae8; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <a href="index.html">🏠 Inicio</a>
+        <a href="consulta.html">Consultar Estatus &rarr;</a>
+    </div>
+
+    <div class="main-wrapper">
+        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/1.png" class="side-banner">
+
+        <div class="form-container">
+            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/Header.png" class="form-header-img">
+            
+            <div class="form-content">
+                <h1>¡Tu Opinión nos Importa!</h1>
+                <p>Ayúdanos a mejorar calificando nuestro servicio.</p>
+
+                <form id="formComentario">
+                    <input type="hidden" name="accion" value="comentar">
+                    
+                    <input type="text" name="nombre" placeholder="Tu Nombre" required>
+                    
+                    <p style="margin-bottom: 5px; font-weight: bold;">Calificación:</p>
+                    <div class="rating">
+                        <input type="radio" name="estrellas" id="star5" value="5"><label for="star5">★</label>
+                        <input type="radio" name="estrellas" id="star4" value="4"><label for="star4">★</label>
+                        <input type="radio" name="estrellas" id="star3" value="3"><label for="star3">★</label>
+                        <input type="radio" name="estrellas" id="star2" value="2"><label for="star2">★</label>
+                        <input type="radio" name="estrellas" id="star1" value="1"><label for="star1">★</label>
+                    </div>
+
+                    <textarea name="mensaje" placeholder="Escribe tu experiencia aquí..." required></textarea>
+
+                    <button type="submit" id="btnEnviar" class="btn-save">Enviar Comentario</button>
+                </form>
+                
+                <p id="mensajeRespuesta" style="margin-top: 15px; font-weight: bold;"></p>
+
+                <a href="https://g.page/r/TU_LINK_DE_RESEÑA_AQUI/review" target="_blank" id="btnGoogle">
+                    <i class="fab fa-google"></i> ¡Publicar también en Google!
+                </a>
+            </div>
+        </div>
+
+        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/2.png" class="side-banner">
+    </div>
+
+    <a href="https://wa.me/584129020243?text=Hola,%20quisiera%20dejar%20una%20sugerencia" class="float-wa" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.tiktok.com/@soportecrj" target="_blank" class="social-btn tiktok"><i class="fab fa-tiktok"></i> TikTok</a>
+            <a href="https://www.instagram.com/soportecrj/" target="_blank" class="social-btn instagram"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://www.facebook.com/ventascrj" target="_blank" class="social-btn facebook"><i class="fab fa-facebook"></i> Facebook</a>
+            <a href="https://www.youtube.com/@soportecrj" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i> YouTube</a>
+        </div>
+        <div class="copyright-text">&copy; 2025 SOPORTE CRJ, C.A. J407133640 - Todos los derechos reservados.</div>
+    </footer>
+
+    <script>
+        // PEGA AQUÍ TU URL DEL SCRIPT (La misma de siempre)
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbw21831tWm9MtbRzS_Wbz7VcCkXHymbH0aWbamtR8nI4c-xzcI3dM0rZrHMRmrx4l_xoA/exec";
+
+        const form = document.getElementById('formComentario');
+        
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const btn = document.getElementById('btnEnviar');
+            const msg = document.getElementById('mensajeRespuesta');
+            const btnGoogle = document.getElementById('btnGoogle');
+
+            const estrellas = document.querySelector('input[name="estrellas"]:checked');
+            if (!estrellas) { alert("Por favor selecciona una calificación"); return; }
+            
+            const valorEstrellas = parseInt(estrellas.value);
+
+            btn.disabled = true; btn.innerText = "Enviando..."; msg.innerText = "";
+
+            const formData = new FormData(form);
+            fetch(URL_SCRIPT, { method: 'POST', body: formData })
+            .then(r => r.text())
+            .then(data => {
+                msg.innerText = "¡Gracias por tu comentario!";
+                msg.style.color = "green";
+                form.reset();
+                
+                // MAGIA: Si calificaron bien, los invitamos a Google
+                if(valorEstrellas >= 4) {
+                    msg.innerHTML = "¡Nos alegra que te guste!<br>¿Podrías dejarnos esta misma opinión en Google?";
+                    btnGoogle.style.display = "block"; // Muestra el botón de Google
+                }
+            })
+            .catch(e => { msg.innerText = "Error enviando"; msg.style.color = "red"; })
+            .finally(() => { btn.disabled = false; btn.innerText = "Enviar Comentario"; });
+        });
+    </script>
+</body>
+</html>
