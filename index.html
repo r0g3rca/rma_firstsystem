@@ -32,7 +32,7 @@
 
         /* IMÁGENES LATERALES */
         .side-banner {
-            width: 300px; /* Tamaño solicitado */
+            width: 300px; 
             height: auto;
             max-height: 600px;
             object-fit: cover;
@@ -47,7 +47,7 @@
             background: white; 
             border-radius: 8px; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            overflow: hidden; /* Para que el header no se salga */
+            overflow: hidden; 
         }
 
         /* HEADER DEL FORMULARIO */
@@ -55,7 +55,7 @@
             width: 100%;
             height: auto;
             display: block;
-            max-height: 200px; /* Limite de altura para que no ocupe toda la pantalla */
+            max-height: 200px; 
             object-fit: cover;
         }
 
@@ -84,10 +84,21 @@
             font-size: 0.9rem;
             margin-top: auto;
         }
+        
+        /* Enlace discreto para técnicos en el footer */
+        footer a.tech-link {
+            color: #bdc3c7;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+        footer a.tech-link:hover { color: #fff; opacity: 1; text-decoration: underline; }
 
         /* RESPONSIVE: MÓVIL Y TABLET */
         @media (max-width: 1100px) {
-            .side-banner { display: none; } /* Oculta laterales en pantallas medianas/pequeñas */
+            .side-banner { display: none; } 
             .main-wrapper { padding: 10px; }
         }
         @media (max-width: 600px) {
@@ -104,10 +115,10 @@
     </div>
 
     <div class="main-wrapper">
-        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/1.png" alt="Publicidad Izquierda" class="side-banner">
+        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/imagen%201.png" alt="Publicidad Izquierda" class="side-banner">
 
         <div class="form-container">
-            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/header.png" alt="Encabezado" class="form-header-img">
+            <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/Header.png" alt="Encabezado" class="form-header-img">
             
             <div class="form-content">
                 <h1>Nueva Orden de Servicio</h1>
@@ -187,41 +198,5 @@
             </div>
         </div>
 
-        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/2.png" alt="Publicidad Derecha" class="side-banner">
+        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/imagen%202.png" alt="Publicidad Derecha" class="side-banner">
     </div>
-
-    <footer>
-        &copy; 2025 Sistema de Gestión RMA - Todos los derechos reservados.
-    </footer>
-
-    <script>
-        // URL DE TU SCRIPT
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxFIfG13unVkkXwc_fiAwVfPtAAiLzWj4KEXosKiVH9TJIxf_vwKN61sChmK-Ue9-NXNg/exec";
-
-        const form = document.getElementById('formRMA');
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('btnGuardar');
-            const msg = document.getElementById('mensajeRegistro');
-            
-            if (form.vendedor.value === "") { alert("Seleccione un vendedor"); return; }
-
-            btn.disabled = true;
-            btn.innerText = "Guardando...";
-            msg.innerText = "";
-
-            const formData = new FormData(form);
-            fetch(URL_SCRIPT, { method: 'POST', body: formData })
-            .then(r => r.text())
-            .then(data => {
-                msg.innerText = "¡Guardado con Éxito!";
-                msg.style.color = "green";
-                form.reset();
-                form.vendedor.value = "";
-            })
-            .catch(e => { msg.innerText = "Error de conexión"; msg.style.color = "red"; })
-            .finally(() => { btn.disabled = false; btn.innerText = "Guardar Orden"; });
-        });
-    </script>
-</body>
-</html>
