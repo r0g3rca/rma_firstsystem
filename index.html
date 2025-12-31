@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
+        /* ESTILOS GENERALES DE PANTALLA */
         body { 
             font-family: 'Segoe UI', sans-serif; 
             background-color: #f4f7f6; 
@@ -64,33 +65,38 @@
             display: none; animation: fadeIn 0.5s;
         }
 
-        .btn-save { background-color: #27ae60; color: white; width: 100%; padding: 15px; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        /* BOTONES DE ACCIÓN */
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        
+        .btn-save { 
+            background-color: #27ae60; color: white; flex: 2; 
+            padding: 15px; border: none; border-radius: 5px; 
+            font-size: 18px; font-weight: bold; cursor: pointer; 
+        }
         .btn-save:hover { background-color: #2ecc71; }
-        .btn-save:disabled { background-color: #bdc3c7; }
+        
+        .btn-print { 
+            background-color: #3498db; color: white; flex: 1; 
+            padding: 15px; border: none; border-radius: 5px; 
+            font-size: 18px; font-weight: bold; cursor: pointer; text-align: center;
+        }
+        .btn-print:hover { background-color: #2980b9; }
+
+        .btn-save:disabled, .btn-print:disabled { background-color: #bdc3c7; cursor: not-allowed; }
 
         /* Footer */
         footer {
             background-color: #2c3e50; color: white; text-align: center; padding: 25px 20px;
             font-size: 0.9rem; margin-top: auto; display: flex; flex-direction: column; gap: 15px;
         }
-        
         .social-icons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        
-        .social-btn { 
-            display: flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 20px; 
-            text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; 
-        }
-
-        /* Colores de Redes */
+        .social-btn { display: flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 20px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
         .tiktok { background-color: #000000; border: 1px solid #333; }
         .instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
         .facebook { background-color: #1877F2; }
         .youtube { background-color: #FF0000; }
-        
         .social-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-
         .copyright-text { font-size: 0.85rem; opacity: 0.8; margin-top: 5px; }
-
         .tech-link { color: #7f8c8d; text-decoration: none; font-size: 1.2rem; margin-top: 5px; transition: 0.3s; }
         .tech-link:hover { color: #fff; }
 
@@ -103,10 +109,38 @@
         }
         .float-wa:hover { background-color: #20ba5a; transform: scale(1.1); }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- ESTILOS DE IMPRESIÓN (RECIBO) --- */
+        #printable-receipt { display: none; } /* Oculto en pantalla normal */
+
+        @media print {
+            body * { visibility: hidden; } /* Oculta todo lo normal */
+            .navbar, .side-banner, footer, .float-wa, .form-container { display: none; }
+            
+            /* Muestra solo el recibo */
+            #printable-receipt, #printable-receipt * {
+                visibility: visible;
+            }
+            #printable-receipt {
+                display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+                background: white;
+                color: black;
+                font-family: 'Courier New', Courier, monospace;
+            }
+            
+            .receipt-header { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .receipt-title { font-size: 1.5rem; font-weight: bold; }
+            .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; border-bottom: 1px dotted #ccc; padding-bottom: 2px;}
+            .receipt-footer { text-align: center; margin-top: 30px; border-top: 2px dashed #000; padding-top: 10px; font-size: 0.8rem; }
+            .receipt-sign { margin-top: 50px; display: flex; justify-content: space-between; }
+            .sign-box { border-top: 1px solid #000; width: 40%; text-align: center; padding-top: 5px; }
+        }
 
         @media (max-width: 1100px) { .side-banner { display: none; } .main-wrapper { padding: 10px; } }
-        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: span 1; } .form-content { padding: 15px; } }
     </style>
 </head>
 <body>
@@ -127,11 +161,11 @@
                     <div class="form-grid">
                         <div>
                             <label>N° de orden:</label>
-                            <input type="number" name="orden" required placeholder="Ej: 1001" min="1">
+                            <input type="number" id="inpOrden" name="orden" required placeholder="Ej: 1001" min="1">
                         </div>
                         <div>
                             <label>Fecha de recepción:</label>
-                            <input type="text" value="HOY" disabled style="background: #eee;">
+                            <input type="text" id="inpFecha" value="" disabled style="background: #eee;">
                         </div>
                         
                         <div>
@@ -158,11 +192,11 @@
                         </div>
                         <div>
                             <label>Serial:</label>
-                            <input type="text" name="serial" required>
+                            <input type="text" id="inpSerial" name="serial" required>
                         </div>
                         <div class="full-width">
                             <label>Descripción del equipo:</label>
-                            <input type="text" name="descripcion" placeholder="Marca, Modelo, Color..." required>
+                            <input type="text" id="inpModelo" name="descripcion" placeholder="Marca, Modelo, Color..." required>
                         </div>
                         
                         <div>
@@ -180,124 +214,10 @@
                         <div class="full-width">
                             <label>Accesorios recibidos:</label>
                             <div class="checkbox-container">
-                                <label class="checkbox-item"><input type="checkbox" class="acc-check" value="Cargador"> Cargador</label>
-                                <label class="checkbox-item"><input type="checkbox" class="acc-check" value="Caja"> Caja</label>
-                                <label class="checkbox-item"><input type="checkbox" class="acc-check" value="Animes"> Animes</label>
-                                <label class="checkbox-item"><input type="checkbox" class="acc-check" value="Manuales"> Manuales</label>
-                                <label class="checkbox-item"><input type="checkbox" class="acc-check" value="Bolsas Originales"> Bolsas Originales</label>
-                            </div>
-                            <input type="text" id="accOtros" placeholder="Otros accesorios (Especifique aquí)..." style="margin-top: 10px;">
-                        </div>
-
-                        <div class="full-width">
-                            <label>Falla reportada:</label>
-                            <textarea name="falla" rows="3" required placeholder="Describa el problema..."></textarea>
-                        </div>
-                        
-                        <div class="full-width" style="border-top: 1px solid #eee; margin-top: 10px; padding-top: 10px;">
-                            <strong style="color:#2c3e50;">Datos del cliente</strong>
-                        </div>
-                        <div>
-                            <label>Nombre del cliente:</label>
-                            <input type="text" name="recepcion">
-                        </div>
-                        <div>
-                            <label>Teléfono:</label>
-                            <input type="tel" name="telefono">
-                        </div>
-                        <div class="full-width">
-                            <label>Correo electrónico:</label>
-                            <input type="email" name="email">
-                        </div>
-                    </div>
-                    <button type="submit" id="btnGuardar" class="btn-save">Guardar orden</button>
-                </form>
-                <p id="mensajeRegistro" style="text-align: center; font-weight: bold; margin-top:10px;"></p>
-            </div>
-        </div>
-
-        <img src="https://raw.githubusercontent.com/r0g3rca/rma_firstsystem/main/imagenes/2.png" alt="Publicidad Derecha" class="side-banner">
-    </div>
-
-    <a href="https://wa.me/584129020243?text=quiero%20un%20servicio%20tecnico%20me%20podrias%20brindar%20mas%20informacion" class="float-wa" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <footer>
-        <div class="social-icons">
-            <a href="https://www.tiktok.com/@soportecrj" target="_blank" class="social-btn tiktok">
-                <i class="fab fa-tiktok"></i> TikTok
-            </a>
-            <a href="https://www.instagram.com/soportecrj/" target="_blank" class="social-btn instagram">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
-            <a href="https://www.facebook.com/ventascrj" target="_blank" class="social-btn facebook">
-                <i class="fab fa-facebook"></i> Facebook
-            </a>
-            <a href="https://www.youtube.com/@soportecrj" target="_blank" class="social-btn youtube">
-                <i class="fab fa-youtube"></i> YouTube
-            </a>
-        </div>
-        
-        <div class="copyright-text">
-            &copy; 2025 SOPORTE CRJ, C.A. J407133640 - Todos los derechos reservados.
-        </div>
-        
-        <a href="tecnico.html" class="tech-link" title="Acceso Técnicos">
-            <i class="fas fa-lock"></i>
-        </a>
-    </footer>
-
-    <script>
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzG1kaskmDCtw8L6UuynXetDwPNn0JDWkyR6ejQ667JQG7kS23lBPiQDSmqFzvmL3PrOQ/exec";
-
-        function verificarCosto() {
-            const select = document.getElementById('selProcedencia');
-            const aviso = document.getElementById('avisoCosto');
-            if (select.value === "Servicio técnico") {
-                aviso.style.display = 'block';
-            } else {
-                aviso.style.display = 'none';
-            }
-        }
-
-        const form = document.getElementById('formRMA');
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('btnGuardar');
-            const msg = document.getElementById('mensajeRegistro');
-            
-            if (form.vendedor.value === "") { alert("Seleccione un vendedor"); return; }
-            if (form.procedencia.value === "") { alert("Seleccione la procedencia"); return; }
-
-            const marcados = document.querySelectorAll('.acc-check:checked');
-            let listaAccesorios = [];
-            marcados.forEach(c => listaAccesorios.push(c.value));
-            const otros = document.getElementById('accOtros').value.trim();
-            if(otros) listaAccesorios.push(otros);
-            const textoFinalAccesorios = listaAccesorios.join(", ");
-
-            btn.disabled = true;
-            btn.innerText = "Guardando...";
-            msg.innerText = "";
-
-            const formData = new FormData(form);
-            formData.append('accesorios', textoFinalAccesorios);
-
-            fetch(URL_SCRIPT, { method: 'POST', body: formData })
-            .then(r => r.text())
-            .then(data => {
-                msg.innerText = "¡Guardado con Éxito!";
-                msg.style.color = "green";
-                form.reset();
-                form.vendedor.value = "";
-                form.procedencia.value = "";
-                verificarCosto(); 
-                document.querySelectorAll('.acc-check').forEach(c => c.checked = false);
-            })
-            .catch(e => { msg.innerText = "Error de conexión"; msg.style.color = "red"; })
-            .finally(() => { btn.disabled = false; btn.innerText = "Guardar orden"; });
-        });
-    </script>
-</body>
-</html>
+                                <label class="checkbox-item" style="color:#d35400; font-weight:bold;">
+                                    <input type="checkbox" class="acc-check special-check" value="Solo Equipo"> Sin accesorios solo equipo
+                                </label>
+                                <label class="checkbox-item"><input type="checkbox" class="acc-check normal-check" value="Cargador"> Cargador</label>
+                                <label class="checkbox-item"><input type="checkbox" class="acc-check normal-check" value="Caja"> Caja</label>
+                                <label class="checkbox-item"><input type="checkbox" class="acc-check normal-check" value="Animes"> Animes</label>
+                                <label class="checkbox-item"><input type="checkbox"
