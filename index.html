@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* (LOS MISMOS ESTILOS DE SIEMPRE) */
+        /* (ESTILOS IGUALES QUE ANTES) */
         body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
         .navbar { background: #2c3e50; padding: 10px 20px; text-align: right; }
         .navbar a { color: white; text-decoration: none; font-weight: bold; background: #34495e; padding: 8px 15px; border-radius: 4px; font-size: 0.9rem;}
@@ -31,8 +31,6 @@
         .btn-save { background-color: #27ae60; color: white; flex: 2; padding: 15px; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .btn-save:hover { background-color: #2ecc71; }
         .btn-print { background-color: #3498db; color: white; flex: 1; padding: 15px; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; text-align: center; }
-        .btn-print:hover { background-color: #2980b9; }
-        .btn-save:disabled, .btn-print:disabled { background-color: #bdc3c7; cursor: not-allowed; }
         footer { background-color: #2c3e50; color: white; text-align: center; padding: 25px 20px; font-size: 0.9rem; margin-top: auto; display: flex; flex-direction: column; gap: 15px; }
         .social-icons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .social-btn { display: flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 20px; text-decoration: none; color: white; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
@@ -45,7 +43,6 @@
         .tech-link { color: #7f8c8d; text-decoration: none; font-size: 1.2rem; margin-top: 5px; transition: 0.3s; }
         .tech-link:hover { color: #fff; }
         .float-wa { position: fixed; width: 60px; height: 60px; bottom: 25px; right: 25px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 3px #999; z-index: 100; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
-        .float-wa:hover { background-color: #20ba5a; transform: scale(1.1); }
         
         #printable-receipt { display: none; }
         @media print {
@@ -89,9 +86,20 @@
                             </select>
                         </div>
                         <div><label>N° de control:</label><input type="text" name="control"></div>
-                        <div><label>Código de artículo:</label><input type="text" name="codigo"></div>
+                        
+                        <div>
+                            <label>Código de artículo:</label>
+                            <input type="text" id="inpCodigo" name="codigo" onblur="buscarProducto()" placeholder="Escriba código y tabula...">
+                            <span id="loadingCode" style="font-size: 0.8rem; color: #3498db; display:none;">🔍 Buscando...</span>
+                        </div>
+
                         <div><label>Serial:</label><input type="text" id="inpSerial" name="serial" required></div>
-                        <div class="full-width"><label>Descripción del equipo:</label><input type="text" id="inpModelo" name="descripcion" placeholder="Marca, Modelo, Color..." required></div>
+                        
+                        <div class="full-width">
+                            <label>Descripción del equipo:</label>
+                            <input type="text" id="inpModelo" name="descripcion" placeholder="Marca, Modelo, Color..." required>
+                        </div>
+                        
                         <div>
                             <label>Procedencia:</label>
                             <select name="procedencia" id="selProcedencia" required onchange="verificarCosto()">
@@ -161,11 +169,29 @@
     </div>
 
     <script>
-        // PEGA AQUÍ TU URL NUEVA AL HACER LA NUEVA IMPLEMENTACIÓN
+        // PEGA AQUÍ TU URL NUEVA
         const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzG1kaskmDCtw8L6UuynXetDwPNn0JDWkyR6ejQ667JQG7kS23lBPiQDSmqFzvmL3PrOQ/exec";
 
         const hoy = new Date().toLocaleDateString();
         document.getElementById('inpFecha').value = hoy;
+
+        // --- BÚSQUEDA DE PRODUCTO ---
+        function buscarProducto() {
+            const codigo = document.getElementById('inpCodigo').value;
+            if(!codigo) return;
+            
+            document.getElementById('loadingCode').style.display = 'inline';
+            
+            fetch(URL_SCRIPT + "?accion=buscar_producto&codigo=" + encodeURIComponent(codigo))
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('loadingCode').style.display = 'none';
+                if(data.estado === "ok") {
+                    document.getElementById('inpModelo').value = data.descripcion;
+                }
+            })
+            .catch(e => document.getElementById('loadingCode').style.display = 'none');
+        }
 
         const checkSolo = document.querySelector('.special-check');
         const checkNormales = document.querySelectorAll('.normal-check');
@@ -239,11 +265,10 @@
             fetch(URL_SCRIPT, { method: 'POST', body: formData })
             .then(r => r.text())
             .then(data => {
-                // AQUÍ ESTÁ EL CAMBIO IMPORTANTE: SI DETECTA "Error"
                 if (data.startsWith("Error")) {
                     msg.innerText = data;
                     msg.style.color = "red";
-                    alert(data); // Alerta visual
+                    alert(data);
                 } else {
                     msg.innerText = "¡Guardado con éxito!";
                     msg.style.color = "green";
